@@ -6,12 +6,13 @@
 
 #include "sculptor.h"
 
-Sculptor::Sculptor(int _nx, int _ny, int _nz) {
+Sculptor::Sculptor(int _nx, int _ny, int _nz) { // construtor
     nx = _nx;
     ny = _ny;
     nz = _nz;
+
 }
 
-Sculptor:: ~Sculptor() {
+Sculptor:: ~Sculptor() { // destrutor
     
 }
