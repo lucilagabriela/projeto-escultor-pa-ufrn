@@ -182,6 +182,7 @@ void Sculptor::writeOFF(const char *filename) {
               << (vOn * 6) << " " << 0 << " "
               << std::endl;
 
+//explicar esse laço
   for (int i = 0; i < nx; i++) {
     for (int j = 0; j < ny; j++) {
       for (int k = 0; k < nz; k++) {
@@ -200,7 +201,8 @@ void Sculptor::writeOFF(const char *filename) {
   }
 
   int contadorFace = 0;
-  
+
+  // explicar esse laço
   for (int i = 0; i < nx; i++) {
     for (int j = 0; j < ny; j++) {
       for (int k = 0; k < nz; k++) {
