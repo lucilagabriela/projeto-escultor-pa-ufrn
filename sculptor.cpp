@@ -6,16 +6,14 @@
 
 // incluir bibliotecas
 #include "sculptor.h"
-#include <fstream>
-#include <iostream>
-#include <stdlib.h>
-#include <fstream>
-#include <sstream>
-#include <string>
 #include <cmath>
+#include <fstream>
 #include <iomanip>
+#include <iostream>
+#include <sstream>
+#include <stdlib.h>
+#include <string>
 using namespace std;
-
 
 Sculptor::Sculptor(int _nx, int _ny, int _nz) { // construtor
   // Incializacao das matrizes de voxel
@@ -35,7 +33,7 @@ Sculptor::Sculptor(int _nx, int _ny, int _nz) { // construtor
       v[i][j] = new Voxel[nz];
     }
   }
-  
+
   for (int i = 0; i < nx; i++) {
     for (int j = 0; j < ny; j++) {
       for (int k = 0; k < nz; k++) {
@@ -60,6 +58,10 @@ Sculptor::~Sculptor() { // destrutor - liberar memoria
   delete[] v;
 }
 
+/**
+@brief O método setColor define as cores ao desenho.
+*/
+
 void Sculptor::setColor(float r, float g, float b, float a) { // metodo setColor
   this->r = r;
   this->g = g;
@@ -75,9 +77,11 @@ void Sculptor::putVoxel(int x, int y, int z) { // metodo putVoxel
   this->v[x][y][z].a = this->a;
 }
 
-void Sculptor::cutVoxel(int x, int y, int z) {
-  v[x][y][z].show = false;
-}
+void Sculptor::cutVoxel(int x, int y, int z) { v[x][y][z].show = false; }
+
+/**
+@brief O método putBox coloca uma caixa no espaço onde o desenho será esculpido.
+*/
 
 void Sculptor::putBox(int x0, int x1, int y0, int y1, int z0, int z1) {
   for (int i = x0; i <= x1; i++) {
@@ -127,7 +131,8 @@ void Sculptor::cutSphere(int xcenter, int ycenter, int zcenter, int radius) {
   }
 }
 
-void Sculptor::putEllipsoid(int xcenter, int ycenter, int zcenter, int rx, int ry, int rz) {
+void Sculptor::putEllipsoid(int xcenter, int ycenter, int zcenter, int rx,
+                            int ry, int rz) {
   for (int i = 0; i < nx; i++) {
     for (int j = 0; j < ny; j++) {
       for (int k = 0; k < nz; k++) {
@@ -141,7 +146,8 @@ void Sculptor::putEllipsoid(int xcenter, int ycenter, int zcenter, int rx, int r
   }
 }
 
-void Sculptor::cutEllipsoid(int xcenter, int ycenter, int zcenter, int rx, int ry, int rz) {
+void Sculptor::cutEllipsoid(int xcenter, int ycenter, int zcenter, int rx,
+                            int ry, int rz) {
   for (int i = 0; i < nx; i++) {
     for (int j = 0; j < ny; j++) {
       for (int k = 0; k < nz; k++) {
@@ -157,12 +163,10 @@ void Sculptor::cutEllipsoid(int xcenter, int ycenter, int zcenter, int rx, int r
 
 void Sculptor::writeOFF(const char *filename) {
   // abrir o fluxo de saido p o arquivo
-
-  // varrer a matriz v
   int nvertices, nfaces;
   int vOn = 0;
-  
-  for (int i = 0; i < nx; i++) {  // laço triplamente alinhado
+
+  for (int i = 0; i < nx; i++) { // laço triplamente alinhado
     for (int j = 0; j < ny; j++) {
       for (int k = 0; k < nz; k++) {
         if (v[i][j][k].show == true) {
@@ -173,28 +177,27 @@ void Sculptor::writeOFF(const char *filename) {
   }
   std::ofstream arquivo_off;
   arquivo_off.open(filename);
-  
+
   if (!arquivo_off.is_open()) {
     cout << "Erro ao abrir o arquivo " << endl;
   }
   arquivo_off << "OFF" << std::endl;
-  arquivo_off << (vOn * 8) << " "
-              << (vOn * 6) << " " << 0 << " "
-              << std::endl;
+  arquivo_off << (vOn * 8) << " " << (vOn * 6) << " " << 0 << " " << std::endl;
 
-//explicar esse laço
+  // explicar esse laço
   for (int i = 0; i < nx; i++) {
     for (int j = 0; j < ny; j++) {
       for (int k = 0; k < nz; k++) {
         if (v[i][j][k].show == true) {
-          arquivo_off << i - 0.5 << " " << j + 0.5 << " " << k - 0.5 << std::endl
-                      << i - 0.5 << " " << j - 0.5 << " " << k - 0.5 << std::endl
-                      << i + 0.5 << " " << j + 0.5 << " " << k - 0.5 << std::endl
-                      << i + 0.5 << " " << j + 0.5 << " " << k - 0.5 << std::endl
-                      << i - 0.5 << " " << j + 0.5 << " " << k + 0.5 << std::endl
-                      << i - 0.5 << " " << j - 0.5 << " " << k + 0.5 << std::endl
-                      << i + 0.5 << " " << j - 0.5 << " " << k + 0.5 << std::endl
-                      << i + 0.5 << " " << j + 0.5 << " " << k + 0.5 << std::endl;
+          arquivo_off
+              << i - 0.5 << " " << j + 0.5 << " " << k - 0.5 << std::endl
+              << i - 0.5 << " " << j - 0.5 << " " << k - 0.5 << std::endl
+              << i + 0.5 << " " << j + 0.5 << " " << k - 0.5 << std::endl
+              << i + 0.5 << " " << j + 0.5 << " " << k - 0.5 << std::endl
+              << i - 0.5 << " " << j + 0.5 << " " << k + 0.5 << std::endl
+              << i - 0.5 << " " << j - 0.5 << " " << k + 0.5 << std::endl
+              << i + 0.5 << " " << j - 0.5 << " " << k + 0.5 << std::endl
+              << i + 0.5 << " " << j + 0.5 << " " << k + 0.5 << std::endl;
         }
       }
     }
@@ -208,42 +211,36 @@ void Sculptor::writeOFF(const char *filename) {
       for (int k = 0; k < nz; k++) {
         if (v[i][j][k].show == true) {
           arquivo_off << "4"
-                      << " " << contadorFace + 0 << " "
-                      << contadorFace + 3 << " " << contadorFace + 2
-                      << " " << contadorFace + 1 << " " << std::fixed
-                      << std::setprecision(1) << v[i][j][k].r << " "
-                      << v[i][j][k].g << " " << v[i][j][k].b << " "
-                      << v[i][j][k].a << "\n"
+                      << " " << contadorFace + 0 << " " << contadorFace + 3
+                      << " " << contadorFace + 2 << " " << contadorFace + 1
+                      << " " << std::fixed << std::setprecision(1)
+                      << v[i][j][k].r << " " << v[i][j][k].g << " "
+                      << v[i][j][k].b << " " << v[i][j][k].a << "\n"
                       << "4"
-                      << " " << contadorFace + 4 << " "
-                      << contadorFace + 5 << " " << contadorFace + 6
-                      << " " << contadorFace + 7 << " " << v[i][j][k].r
-                      << " " << v[i][j][k].g << " " << v[i][j][k].b << " "
-                      << v[i][j][k].a << "\n"
+                      << " " << contadorFace + 4 << " " << contadorFace + 5
+                      << " " << contadorFace + 6 << " " << contadorFace + 7
+                      << " " << v[i][j][k].r << " " << v[i][j][k].g << " "
+                      << v[i][j][k].b << " " << v[i][j][k].a << "\n"
                       << "4"
-                      << " " << contadorFace + 0 << " "
-                      << contadorFace + 1 << " " << contadorFace + 5
-                      << " " << contadorFace + 4 << " " << v[i][j][k].r
-                      << " " << v[i][j][k].g << " " << v[i][j][k].b << " "
-                      << v[i][j][k].a << "\n"
+                      << " " << contadorFace + 0 << " " << contadorFace + 1
+                      << " " << contadorFace + 5 << " " << contadorFace + 4
+                      << " " << v[i][j][k].r << " " << v[i][j][k].g << " "
+                      << v[i][j][k].b << " " << v[i][j][k].a << "\n"
                       << "4"
-                      << " " << contadorFace + 0 << " "
-                      << contadorFace + 4 << " " << contadorFace + 7
-                      << " " << contadorFace + 3 << " " << v[i][j][k].r
-                      << " " << v[i][j][k].g << " " << v[i][j][k].b << " "
-                      << v[i][j][k].a << "\n"
+                      << " " << contadorFace + 0 << " " << contadorFace + 4
+                      << " " << contadorFace + 7 << " " << contadorFace + 3
+                      << " " << v[i][j][k].r << " " << v[i][j][k].g << " "
+                      << v[i][j][k].b << " " << v[i][j][k].a << "\n"
                       << "4"
-                      << " " << contadorFace + 7 << " "
-                      << contadorFace + 6 << " " << contadorFace + 2
-                      << " " << contadorFace + 3 << " " << v[i][j][k].r
-                      << " " << v[i][j][k].g << " " << v[i][j][k].b << " "
-                      << v[i][j][k].a << "\n"
+                      << " " << contadorFace + 7 << " " << contadorFace + 6
+                      << " " << contadorFace + 2 << " " << contadorFace + 3
+                      << " " << v[i][j][k].r << " " << v[i][j][k].g << " "
+                      << v[i][j][k].b << " " << v[i][j][k].a << "\n"
                       << "4"
-                      << " " << contadorFace + 1 << " "
-                      << contadorFace + 2 << " " << contadorFace + 6
-                      << " " << contadorFace + 5 << " " << v[i][j][k].r
-                      << " " << v[i][j][k].g << " " << v[i][j][k].b << " "
-                      << v[i][j][k].a << std::endl; 
+                      << " " << contadorFace + 1 << " " << contadorFace + 2
+                      << " " << contadorFace + 6 << " " << contadorFace + 5
+                      << " " << v[i][j][k].r << " " << v[i][j][k].g << " "
+                      << v[i][j][k].b << " " << v[i][j][k].a << std::endl;
           contadorFace = contadorFace + 8;
         }
       }
